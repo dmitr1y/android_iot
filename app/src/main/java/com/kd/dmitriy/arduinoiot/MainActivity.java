@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             outStream = btSocket.getOutputStream();
         } catch (IOException e) {
-            Log.d("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
+            errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
         }
     }
 
@@ -150,14 +150,14 @@ public class MainActivity extends AppCompatActivity {
             try {
                 outStream.flush();
             } catch (IOException e) {
-                Log.d("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
+                errorExit("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
             }
         }
 
         try {
             btSocket.close();
         } catch (IOException e2) {
-            Log.d("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
+            errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
         }
     }
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 msg = msg + ".\n\nВ переменной address у вас прописан 00:00:00:00:00:00, вам необходимо прописать реальный MAC-адрес Bluetooth модуля";
             msg = msg + ".\n\nПроверьте поддержку SPP UUID: " + MY_UUID.toString() + " на Bluetooth модуле, к которому вы подключаетесь.\n\n";
 
-            Log.d("Fatal Error", msg);
+            errorExit("Fatal Error", msg);
         }
     }
 
