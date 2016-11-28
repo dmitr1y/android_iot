@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             btSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) {
-            errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
+            Log.d("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
         }
 
         // Discovery is resource intensive.  Make sure it isn't going on
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 btSocket.close();
             } catch (IOException e2) {
-                errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
+                Log.d("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
             }
         }
 
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             outStream = btSocket.getOutputStream();
         } catch (IOException e) {
-            errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
+            Log.d("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
         }
     }
 
@@ -150,14 +150,14 @@ public class MainActivity extends AppCompatActivity {
             try {
                 outStream.flush();
             } catch (IOException e) {
-                errorExit("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
+                Log.d("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
             }
         }
 
         try {
             btSocket.close();
         } catch (IOException e2) {
-            errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
+            Log.d("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
         }
     }
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 msg = msg + ".\n\nВ переменной address у вас прописан 00:00:00:00:00:00, вам необходимо прописать реальный MAC-адрес Bluetooth модуля";
             msg = msg + ".\n\nПроверьте поддержку SPP UUID: " + MY_UUID.toString() + " на Bluetooth модуле, к которому вы подключаетесь.\n\n";
 
-            errorExit("Fatal Error", msg);
+            Log.d("Fatal Error", msg);
         }
     }
 
