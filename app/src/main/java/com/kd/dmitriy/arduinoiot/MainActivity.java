@@ -1,10 +1,12 @@
 package com.kd.dmitriy.arduinoiot;
 
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
 
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -17,6 +19,11 @@ import android.util.Log;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     // MAC-адрес Bluetooth модуля
     private static String address = "20:16:07:18:59:27";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
 
     @Override
@@ -42,20 +54,45 @@ public class MainActivity extends AppCompatActivity {
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
         final Button reley1 = (Button) findViewById(R.id.button);
+        final Button reley2 = (Button) findViewById(R.id.button3);
 
-        reley1.setOnClickListener(new View.OnClickListener() {
+        reley2.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                sendData("0");
+                Log.d(TAG, "...ОТПРАВИЛ 0...");
+            }
+        });
+
+        reley1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
                 sendData("1");
                 Log.d(TAG, "...ОТПРАВИЛ 1...");
             }
         });
+
+        final Button page2 = (Button) findViewById(R.id.button2);
+
+        page2.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+//                sendData("1");
+                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                startActivity(intent);
+                Log.d(TAG, "...открыл активити 2...");
+            }
+        });
         if (checkBox.isChecked()) {
             sendData("1");
             Log.d(TAG, "...ОТПРАВИЛ 1...");
-         //   checkBox.setChecked(false);
+            //   checkBox.setChecked(false);
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -116,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        try     {
+        try {
             btSocket.close();
         } catch (IOException e2) {
             errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
@@ -126,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkBTState() {
         // Check for Bluetooth support and then check to make sure it is turned on
         // Emulator doesn't support Bluetooth and will return null
-        if(btAdapter==null) {
+        if (btAdapter == null) {
             errorExit("Fatal Error", "Bluetooth не поддерживается");
         } else {
             if (btAdapter.isEnabled()) {
@@ -139,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void errorExit(String title, String message){
+    private void errorExit(String title, String message) {
         Toast.makeText(getBaseContext(), title + " - " + message, Toast.LENGTH_LONG).show();
         finish();
     }
@@ -155,9 +192,45 @@ public class MainActivity extends AppCompatActivity {
             String msg = "In onResume() and an exception occurred during write: " + e.getMessage();
             if (address.equals("00:00:00:00:00:00"))
                 msg = msg + ".\n\nВ переменной address у вас прописан 00:00:00:00:00:00, вам необходимо прописать реальный MAC-адрес Bluetooth модуля";
-            msg = msg +  ".\n\nПроверьте поддержку SPP UUID: " + MY_UUID.toString() + " на Bluetooth модуле, к которому вы подключаетесь.\n\n";
+            msg = msg + ".\n\nПроверьте поддержку SPP UUID: " + MY_UUID.toString() + " на Bluetooth модуле, к которому вы подключаетесь.\n\n";
 
             errorExit("Fatal Error", msg);
         }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
