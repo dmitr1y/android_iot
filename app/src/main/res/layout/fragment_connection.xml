@@ -13,6 +13,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="58dp"
-        android:text="Найти устройства" />
+        android:text="@string/btn_connect" />
 
 </RelativeLayout>

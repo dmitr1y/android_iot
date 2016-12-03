@@ -1,8 +1,11 @@
 package com.kd.dmitriy.arduinoiot.fragments;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,11 @@ public class fragmentConnection extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    BluetoothAdapter BTAdapter;
+    String status;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public fragmentConnection() {
@@ -57,6 +60,20 @@ public class fragmentConnection extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        BTAdapter = BluetoothAdapter.getDefaultAdapter();
+        // Phone does not support Bluetooth so let the user know and exit.
+        if (BTAdapter == null) {
+            new AlertDialog.Builder(this.getActivity())
+                    .setTitle("Not compatible")
+                    .setMessage("Your phone does not support Bluetooth")
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     }
 

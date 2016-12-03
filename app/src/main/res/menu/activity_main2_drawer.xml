@@ -5,19 +5,19 @@
         <item
             android:id="@+id/nav_monitoring"
             android:icon="?android:attr/actionModeWebSearchDrawable"
-            android:title="Monitoring" />
+            android:title="@string/navigation_monitoring" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:title="@string/navigation_settings" />
         <item
             android:id="@+id/nav_statistics"
             android:icon="@android:drawable/stat_notify_sync"
-            android:title="Statistics" />
+            android:title="@string/navigation_statistics" />
         <item
             android:id="@+id/nav_connection"
             android:icon="@android:drawable/stat_sys_data_bluetooth"
-            android:title="Connection" />
+            android:title="@string/navigation_connection" />
     </group>
 
     <item android:title="Communicate">
