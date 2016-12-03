@@ -2,6 +2,7 @@ package com.kd.dmitriy.arduinoiot.fragments;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class fragmentConnection extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private final static int REQUEST_ENABLE_BT = 1;
     BluetoothAdapter BTAdapter;
     String status;
     // TODO: Rename and change types of parameters
@@ -74,6 +76,12 @@ public class fragmentConnection extends Fragment {
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        } else {
+            if (!BTAdapter.isEnabled()) {
+                //принудительное включение BT
+                Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBT, REQUEST_ENABLE_BT);
+            }
         }
     }
 
