@@ -1,18 +1,17 @@
 package com.kd.dmitriy.arduinoiot.fragments;
 
-import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd.dmitriy.arduinoiot.R;
-
+import com.kd.dmitriy.arduinoiot.network.BluetoothThread;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -26,9 +25,6 @@ public class fragmentConnection extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private final static int REQUEST_ENABLE_BT = 1;
-    BluetoothAdapter BTAdapter;
-    String status;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -63,26 +59,17 @@ public class fragmentConnection extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        // Phone does not support Bluetooth so let the user know and exit.
-        if (BTAdapter == null) {
-            new AlertDialog.Builder(this.getActivity())
-                    .setTitle("Not compatible")
-                    .setMessage("Your phone does not support Bluetooth")
-                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            System.exit(0);
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        } else {
-            if (!BTAdapter.isEnabled()) {
-                //принудительное включение BT
-                Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBT, REQUEST_ENABLE_BT);
+        BluetoothThread t = new BluetoothThread("20:16:07:18:59:27", new Handler() {
+            @Override
+            public void handleMessage(Message message) {
+                String msg = (String) message.obj;
+                //do_something(msg);
+
             }
-        }
+        });
+
+        Handler writeHandler = t.getWriteHandler();
+        t.start();
     }
 
     @Override
